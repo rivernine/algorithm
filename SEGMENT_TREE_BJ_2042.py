@@ -3,31 +3,48 @@
 arr = []
 seg = []
 
-def init(node, start, end):
-  print(node, start, end)
-  if start == end:
-    seg[node] = arr[start]
-    print("seg["+ str(node) +"] = " + str(arr[start]))
+def update(node, start, end, index, diff):
+  if index < start or index > end:
+    return
+  seg[node] += diff
+  if start != end:
+    mid = (start + end) // 2
+    update(node * 2, start, mid, index, diff)
+    update(node * 2 + 1, mid + 1, end, index, diff)
+
+def query(node, start, end, left, right):
+  if left > end or right < start:
+    return 0
+  if left <= start and right >= end:
     return seg[node]
   mid = (start + end) // 2
-  seg[node] = init(2 * node, start, mid) + init(2 * node + 1, mid + 1, end)
-  print("seg[" + str(node) + "] = " + str(seg[node]))
+  return query(node * 2, start, mid, left, right) + query(node * 2 + 1, mid + 1, end, left, right)
+
+def init(node, start, end):
+  if start == end:
+    seg[node] = arr[start]
+    return seg[node]
+  mid = (start + end) // 2
+  seg[node] = init(node * 2, start, mid) + init(node * 2 + 1, mid + 1, end)
   return seg[node]
 
 if __name__=="__main__":
-  # N, M, K = map(int, input().split())
-  # for i in range(0, N):
-  #   arr.append(input())
-  # for i in range(0, M + K):
-    # a, b, c = map(int, input().split())
-  N, M, K = 5, 2, 2
-  arr = [1, 2, 3, 4, 5]
-
-
-  seg = [0 for i in range(0, len(arr)*2)]
-  init(1, 0, len(arr) - 1)
-  print(seg)
-  
+  N, M, K = map(int, input().split())
+  for i in range(0, N):
+    arr.append(int(input()))    
+  seg = [0 for i in range(0, N*2)]
+  init(1, 0, N - 1)
+  # print(seg)
+  for _ in range(0, M + K):
+    a, b, c = map(int, input().split())
+    if a == 1:
+      diff = c - arr[b - 1]
+      arr[b - 1] = c      
+      update(1, 0, N - 1, b - 1, diff)
+      # print(seg)
+    else:
+      print(query(1, 0, N - 1, b - 1, c - 1))
+  # print(query(1, 0, len(arr) - 1, 1, 1))
 # 5 2 2
 # 1
 # 2
