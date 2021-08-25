@@ -32,19 +32,16 @@ if __name__=="__main__":
   N, M, K = map(int, input().split())
   for i in range(0, N):
     arr.append(int(input()))    
-  seg = [0 for i in range(0, N*2)]
+  seg = [0] * 3000000
   init(1, 0, N - 1)
-  # print(seg)
   for _ in range(0, M + K):
     a, b, c = map(int, input().split())
     if a == 1:
       diff = c - arr[b - 1]
       arr[b - 1] = c      
       update(1, 0, N - 1, b - 1, diff)
-      # print(seg)
     else:
       print(query(1, 0, N - 1, b - 1, c - 1))
-  # print(query(1, 0, len(arr) - 1, 1, 1))
 # 5 2 2
 # 1
 # 2

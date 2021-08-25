@@ -4,6 +4,7 @@
 
 백준 아이디: [NEXUS94](https://www.acmicpc.net/user/nexus94)
 
+## Segment Tree
 
 
 <h4><u><center>알고리즘은 꾸준히 !!</center>
