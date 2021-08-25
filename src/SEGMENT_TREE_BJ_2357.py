@@ -24,7 +24,7 @@ def init(node, start, end):
   tree[node] = [min(lnode[0], rnode[0]), max(lnode[1], rnode[1])]
   return tree[node]
 
-arr, tree = [], [], [], []
+arr, tree = [], []
 
 if __name__=="__main__":
   N, M = [int(x) for x in sys.stdin.readline().split()]
