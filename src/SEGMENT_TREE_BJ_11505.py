@@ -2,14 +2,17 @@
 import sys
 import math
 
-def update(node, start, end, index, diff):
-  if index < start or index > end:
+def update(node, start, end, target, value):
+  if start == end:
+    tree[node] = value
     return
-  tree[node] = int(tree[node] * diff) % 1000000007
-  if start != end:
-    mid = (start + end) // 2
-    update(node * 2, start, mid, index, diff)
-    update(node * 2 + 1, mid + 1, end, index, diff)
+  mid = (start + end) // 2
+  if target <= mid:
+    update(node * 2, start, mid, target, value)
+  else:
+    update(node * 2 + 1, mid + 1, end, target, value)
+  tree[node] = (tree[node * 2] * tree[node * 2 + 1]) % MOD
+
 
 def query(node, start, end, left, right):
   if left > end or right < start:
@@ -17,16 +20,17 @@ def query(node, start, end, left, right):
   if left <= start and right >= end:
     return tree[node]
   mid = (start + end) // 2
-  return int(query(node * 2, start, mid, left, right) * query(node * 2 + 1, mid + 1, end, left, right)) % 1000000007
+  return int(query(node * 2, start, mid, left, right) * query(node * 2 + 1, mid + 1, end, left, right)) % MOD
 
 def init(node, start, end):
   if start == end:
     tree[node] = arr[start]
     return tree[node]
   mid = (start + end) // 2
-  tree[node] = int(init(node * 2, start, mid) * init(node * 2 + 1, mid + 1, end)) % 1000000007
+  tree[node] = int(init(node * 2, start, mid) * init(node * 2 + 1, mid + 1, end)) % MOD
   return tree[node]
 
+MOD = 1000000007
 arr, tree = [], []
 
 if __name__=="__main__":
@@ -40,10 +44,8 @@ if __name__=="__main__":
 
   for i in range(0, m + k):
     a, b, c = [int(x) for x in sys.stdin.readline().split()]
-    diff = c / arr[b - 1]
-    arr[b - 1] = c
     if a == 1:
-      update(1, 0, n - 1, b - 1, diff)
+      update(1, 0, n - 1, b - 1, c)
     else:
       print(query(1, 0, n - 1, b - 1, c - 1))
 
